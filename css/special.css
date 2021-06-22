@@ -1,0 +1,181 @@
+@charset "utf-8";
+html{
+	font-size: 100%;
+
+body{
+	font-family: 'Lora',Serif;
+	background-color: black;
+	color: green;
+	/*text-align: center;*/
+	}
+
+.container {
+    max-width: 100%;
+}
+
+
+/* ===== 機能の実装に必要なCSS ===== */
+
+/* ドロワーナビゲーションの必須スタイル */
+#nav {
+    position: fixed;
+    right: -270px;
+    top: 0;
+    width: 270px;
+    height: 100%;
+}
+
+/* ドロワーが開かれたときのスタイル */
+.show {
+    transform: translate3d(-270px, 0, 0);
+}
+
+/* 開く・閉じるアニメーション */
+#wrapper, #nav {
+    transition: transform 0.3s;
+}
+
+/* ===== ヘッダーにボタンを配置 ===== */
+.header {
+    padding: 16px 0;
+}
+.button{
+    font-size: 0.8rem;
+    background:#000033; 
+    color:white;
+    border-radius: 3px;
+    padding: 10px 15px;
+    height: auto;
+}
+header .container {
+    display: flex;
+    justify-content: space-between;
+}
+.title-block {
+    flex: 1 1 auto;
+}
+.hamburger {
+    flex: 0 0 32px;
+    align-self: center;
+    margin-left: 16px;
+    text-align: center;
+    color: #fff;
+}
+
+/* ===== 装飾的なCSS ===== */
+
+/* メニュー */
+#nav {
+    padding: 24px 24px 0 24px;
+    background: #000;
+    color: white;
+}
+#nav ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+#nav li a {
+    display: block;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #114d60;
+    text-decoration: none;
+    color: #fff;
+}
+#nav li a:hover {
+    background: #0e3e4d;
+}
+#nav .logo {
+    margin-bottom: 20px;
+}
+
+/* メインコンテンツ */
+main .container {
+    padding: 0;
+}
+.key {
+    width: 100%;
+}
+.content {
+    padding: 0 30px;
+    text-align: center;
+}
+.archive {
+    margin: 40px 0 0;
+    padding: 0 30px;
+}
+.archive-box {
+    margin: 0 auto;
+    width: 320px;
+}
+
+@media(min-width: 768px) {
+    .archive-box {
+        display: flex;
+        justify-content: space-around;
+        width: 100%;
+    }
+}
+.archive h3 {
+    border-top: 1px dashed #809BA6;
+    border-bottom: 1px dashed #809BA6;
+    padding: 0.5rem 0;
+    text-align: center;
+}
+.archive figure {
+    margin: 0 0 2em 0;
+    padding: 0;
+    max-width: 320px;
+}
+.archive figcaption {
+    text-align: center;
+}
+.thumb {
+    max-width: 320px;
+}
+/* Loading Block */
+#loading {
+  width: 100vw;
+  height: 100vh;
+  transition: all 1s;
+  background-color: #0bd;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+}
+.spinner {
+  width: 100px;
+  height: 100px;
+  margin: 200px auto;
+  background-color: #fff;
+  border-radius: 100%;
+  animation: sk-scaleout 1.0s infinite ease-in-out;
+}
+/* Loading Animation */
+@keyframes sk-scaleout {
+  0% {
+    transform: scale(0);
+  } 100% {
+    transform: scale(1.0);
+    opacity: 0;
+  }
+}
+
+/* Hide Loading Block */
+.loaded {
+  opacity: 0;
+  visibility: hidden;
+}
+
+/* Contents Styling */
+.gallery {
+  display: grid;
+  gap: .5rem;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}

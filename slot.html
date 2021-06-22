@@ -1,0 +1,224 @@
+<!doctype html>
+<head>
+	<meta charset="UTF-8">
+	<title>スロット</title>
+<html lang="ja">
+	<meta name="description"content="スロットマシーン">
+	<meta name="robots" content="noindex,nofollow">
+	<link rel="stylesheet" href="css/style.css">
+	<link href="https://fonts.googleapis.com/css2?family=Lora&display=swap" rel="stylesheet">
+	<script type="text/javascript" src="js/script.js"></script>
+<body>
+	
+<div id="home" class="big-bg">	
+<h1>SLOT</h1>
+		<div class="slot">
+			<div class="slot-frame">
+				<ul class="reels">
+					<li class="reel"><img src="image/seven.jpg"></li>
+					<li class="reel"><img src="image/cherry.jpg"></li>
+					<li class="reel"><img src="image/suika.jpg"></li>
+					<li class="reel"><img src="image/jac.jpg"></li>
+					<li class="reel"><img src="image/suzu.jpg"></li> 
+					 <li class="reel"><img src="image/bar.jpg"></li>
+					<li class="reel"><img src="image/fireball.jpg"></li>
+					<li class="reel"><img src="image/coin.jpg"></li> 
+				</ul>
+				<ul class="reels">
+					<li class="reel"><img src="image/seven.jpg"></li>
+					<li class="reel"><img src="image/cherry.jpg"></li>
+					<li class="reel"><img src="image/suika.jpg"></li>
+					<li class="reel"><img src="image/jac.jpg"></li>
+					<li class="reel"><img src="image/suzu.jpg"></li> 
+				    <li class="reel"><img src="image/bar.jpg"></li>
+					<li class="reel"><img src="image/fireball.jpg"></li>
+					<li class="reel"><img src="image/coin.jpg"></li> -->
+				</ul>
+				<ul class="reels">
+					<li class="reel"><img src="image/seven.jpg"></li>
+					<li class="reel"><img src="image/cherry.jpg"></li>
+					<li class="reel"><img src="image/suika.jpg"></li>
+					<li class="reel"><img src="image/jac.jpg"></li>
+					<li class="reel"><img src="image/suzu.jpg"></li> 
+					<li class="reel"><img src="image/bar.jpg"></li>
+					<li class="reel"><img src="image/fireball.jpg"></li>
+					<li class="reel"><img src="image/coin.jpg"></li> 
+				</ul>
+			</div>
+		</div>
+		<div>
+			<button type="button" class="btn-start" src="images/seven.jpg">start</button>
+			<button type="button" class="btn-reset" disabled="true">reset</button>
+		</div>
+		<div>
+			<button type="button" class="btn-stop" data-val="0" disabled="true">stop </button>
+			<button type="button" class="btn-stop" data-val="1" disabled="true">stop </button>
+			<button type="button" class="btn-stop" data-val="2" disabled="true">stop </button>
+    </div>
+   
+    
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script>
+(function (global) {
+				"use strict";
+
+				/*
+				 * スロットのリール回転速度(実行毎秒数)
+				 */
+				let sec = 100;
+
+				/*
+				 * スロットのリール情報
+				 * ・スロットのリールelement
+				 * ・スロットのリール停止フラグ
+				 * ・スロットのリール回転数
+				 */
+				let $reels       = [],
+					stopReelFlag = [],
+					reelCounts   = [];
+
+				/*
+				 * 位置情報
+				 */
+				let slotFrameHeight     = 0,
+					slotReelsHeight     = 0,
+					slotReelItemHeight  = 0,
+					slotReelStart       = 0,
+					slotReelStartHeight = 0;
+
+				/**
+				 * スロット
+				 */
+				let Slot = {
+					/**
+					 * 初期化処理
+					 */
+					init: function init() {
+						$reels[0] = $reels[1] = $reels[2] = null;
+						stopReelFlag[0] = stopReelFlag[1] = stopReelFlag[2] = false;
+						reelCounts[0] = reelCounts[1] = reelCounts[2] = 0;
+					},
+					/**
+					 * スタートボタンのクリックイベント
+					 */
+					start: function () {
+						for (var index = 0; index<3; index++) {
+							Slot.animation(index);
+						}
+					},
+					/**
+					 * ストップボタンのクリックイベント
+					 */
+					stop: function (index) {
+						stopReelFlag[index] = true;
+						if (stopReelFlag[0] && stopReelFlag[1] && stopReelFlag[2]) {
+							// 全リール停止したらリセットボタンを押下できるようにする
+							$('.btn-reset').attr('disabled', false);
+						}
+					},
+					/**
+					 * 位置情報の初期化処理
+					 */
+					resetLocationInfo: function () {
+						slotFrameHeight    = $('.slot-frame').outerHeight();
+						slotReelsHeight    = $('.reels').eq(0).outerHeight();
+						slotReelItemHeight = $('.reel').eq(0).outerHeight();
+						slotReelStart      = 5 - 2;
+						// リールの上下は、半分だけ表示させるための位置調整
+						slotReelStartHeight = -slotReelsHeight;
+						slotReelStartHeight = slotReelStartHeight + slotFrameHeight + ((slotReelItemHeight * 3 / 2) - (slotFrameHeight / 2));
+
+						$('.reels').css({
+							'top':slotReelStartHeight 
+						});
+					},
+					/**
+					 * スロットの回転アニメーション
+					 */
+					animation: function (index) {
+						console.log('アニメーション', '開始', index);
+						if (reelCounts[index] >= 5) {
+							reelCounts[index] = 0;
+						}
+
+						console.log('slotReelStartHeight', slotReelStartHeight);
+						console.log('reelCounts[index]', reelCounts[index]);
+						console.log('slotReelsHeight', slotReelsHeight);
+						console.log('top', slotReelStartHeight + (reelCounts[index] * slotReelItemHeight));
+
+						$('.reels').eq(index).animate({
+							'top': slotReelStartHeight + (reelCounts[index] * slotReelItemHeight)
+						}, {
+							duration: sec,
+							easing: 'linear',
+							complete: function () {
+								console.log('アニメーション', '完了', index, reelCounts[index]);
+								if (stopReelFlag[index]) {
+									console.log('アニメーション', 'ストップ', index, reelCounts[index]);
+									return ;
+								}
+								// 移動階数をカウント
+								reelCounts[index]++;
+								// スロット回転のアニメーションを実行する
+								Slot.animation(index);
+							}
+						});
+					},
+				};
+
+				global.Slot = Slot;
+
+			})((this || 0).self || global);
+
+			/**
+			 * 読み込み後
+			 */
+			$(document).ready(function () {
+
+				/*
+				 * スロットの初期化処理を実行
+				 */
+				Slot.init();
+				Slot.resetLocationInfo();
+
+				/**
+				 * スタートボタンのクリックイベント
+				 */
+				$('.btn-start').click(function () {
+					// スタートボタンを押せないようにする
+					$(this).attr('disabled', true);
+					// スロットの回転を開始
+					Slot.start();
+					// ストップボタンを押せるようにする
+					$('.btn-stop').attr('disabled', false);
+				});
+
+				/**
+				 * リセットボタンのクリックイベント
+				 */
+				$('.btn-reset').click(function () {
+					// リセットボタンを押せないようにする
+					$(this).attr('disabled', true);
+					// スタートボタンを押せるようにする
+					$('.btn-start').attr('disabled', false);
+					// ストップボタンを押せないようにする
+					$('.btn-stop').attr('disabled', true);
+					// スロットのリール情報を初期化
+					Slot.init();
+				});
+
+				/**
+				 * ストップボタンのクリックイベント
+				 */
+				$('.btn-stop').click(function () {
+					// ストップボタンを押せないようにする
+					$(this).attr('disabled', true);
+					// レールの回転を停止
+					Slot.stop($(this).attr('data-val'));
+				});
+
+			});
+			
+			</script>
+	</body>
+</html>
